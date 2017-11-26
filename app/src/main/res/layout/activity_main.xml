@@ -8,13 +8,13 @@
     tools:context="br.com.brunocaldas.bluetooth.MainActivity">
 
     <LinearLayout
-        android:layout_width="359dp"
+        android:layout_width="339dp"
         android:layout_height="509dp"
         android:orientation="vertical"
         tools:layout_editor_absoluteX="15dp">
 
         <LinearLayout
-            android:layout_width="370dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
@@ -38,8 +38,16 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"></LinearLayout>
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnVisibilidade"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Ligar e tornar Visível" />
+        </LinearLayout>
     </LinearLayout>
 
     <android.support.design.widget.BottomNavigationView
