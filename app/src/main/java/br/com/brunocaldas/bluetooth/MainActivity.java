@@ -22,9 +22,9 @@ public class MainActivity extends AppCompatActivity {
     ToggleButton ligar;
     Button visibilidade, dispositivos;
     BluetoothAdapter bluetoothAdapter;
-    ListView listaDispositivos;
+    ListView listaDispositivosNovos, listaDispositivosPareados;
     ProgressBar bar;
-    private ArrayAdapter<String> dispositivosAdapter;
+    private ArrayAdapter<String> dispositivosNovosAdapter, dispositivosPareadosAdapter;
 
     static final int HABILITA_BT = 1;
     static final int HABILITA_DESCOBERTA = 2;
@@ -51,8 +51,10 @@ public class MainActivity extends AppCompatActivity {
             ligar.setChecked(true);
         }
 
-        dispositivosAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
-        listaDispositivos.setAdapter(dispositivosAdapter);
+        dispositivosNovosAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
+        dispositivosPareadosAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
+        listaDispositivosNovos.setAdapter(dispositivosNovosAdapter);
+        listaDispositivosPareados.setAdapter(dispositivosPareadosAdapter);
 
         ligar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -92,7 +94,8 @@ public class MainActivity extends AppCompatActivity {
                         bluetoothAdapter.cancelDiscovery();
                     }
                     Toast.makeText(getApplicationContext(), "Buscando Dispositivos", Toast.LENGTH_SHORT).show();
-                    dispositivosAdapter.clear();
+                    dispositivosNovosAdapter.clear();
+                    dispositivosPareadosAdapter.clear();
                     bar.setVisibility(View.VISIBLE);
                     bluetoothAdapter.startDiscovery();
                 } else {
@@ -110,12 +113,17 @@ public class MainActivity extends AppCompatActivity {
 
             // When discovery finds a device
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-                // Get the BluetoothDevice object from the Intent
+
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                dispositivosAdapter.add(device.getName());
+
+                if (device.getBondState() == BluetoothDevice.BOND_BONDED) {
+                    dispositivosPareadosAdapter.add(device.getName());
+                } else {
+                    dispositivosNovosAdapter.add(device.getName());
+                }
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
                 bar.setVisibility(View.INVISIBLE);
-                Integer contagem = dispositivosAdapter.getCount();
+                Integer contagem = dispositivosNovosAdapter.getCount() + dispositivosPareadosAdapter.getCount();
                 Toast.makeText(getApplicationContext(), "A busca finalizou e retornou " + contagem.toString() + " dispositivos", Toast.LENGTH_LONG).show();
             }
         }
@@ -132,7 +140,8 @@ public class MainActivity extends AppCompatActivity {
         ligar = (ToggleButton) findViewById(R.id.btnLigar);
         visibilidade = (Button) findViewById(R.id.btnVisibilidade);
         dispositivos = (Button) findViewById(R.id.btnDispositivos);
-        listaDispositivos = (ListView) findViewById(R.id.lstDispositivos);
+        listaDispositivosNovos = (ListView) findViewById(R.id.lstDispositivosNovos);
+        listaDispositivosPareados = (ListView) findViewById(R.id.lstDispositivosPareados);
         bar = (ProgressBar) findViewById(R.id.progressBar);
     }
 
