@@ -67,7 +67,7 @@
         <ListView
             android:id="@+id/lstDispositivosNovos"
             android:layout_width="match_parent"
-            android:layout_height="130dp"
+            android:layout_height="154dp"
             android:scrollbars="vertical">
 
         </ListView>

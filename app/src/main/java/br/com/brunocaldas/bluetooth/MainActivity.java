@@ -116,11 +116,20 @@ public class MainActivity extends AppCompatActivity {
 
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 
-                if (device.getBondState() == BluetoothDevice.BOND_BONDED) {
-                    dispositivosPareadosAdapter.add(device.getName());
-                } else {
-                    dispositivosNovosAdapter.add(device.getName());
+                try{
+                    if(device.getType() != BluetoothDevice.DEVICE_TYPE_UNKNOWN) {
+                        if (device.getBondState() == BluetoothDevice.BOND_BONDED) {
+                            dispositivosPareadosAdapter.add(device.getName());
+
+
+                        } else{
+                            dispositivosNovosAdapter.add(device.getName());
+                        }
+                    }
+                } catch (Exception e) {
+                    Toast.makeText(getApplicationContext(), e.toString(),Toast.LENGTH_LONG).show();
                 }
+
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
                 bar.setVisibility(View.INVISIBLE);
                 Integer contagem = dispositivosNovosAdapter.getCount() + dispositivosPareadosAdapter.getCount();
